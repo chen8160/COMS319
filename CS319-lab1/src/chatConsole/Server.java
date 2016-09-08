@@ -94,12 +94,20 @@ public class Server implements Runnable {
 	}
 	
 	private String strEncryption(String original){
-		char[] strArray = original.toCharArray();
-		for(int i = 0; i < strArray.length; i++){
-			strArray[i] ^= 0b11110000;
-		}
-		String ret = String.valueOf(strArray);
-		return ret;
+//		char[] strArray = original.toCharArray();
+//		for(int i = 0; i < strArray.length; i++){
+//			strArray[i] ^= 0b11110000;
+//		}
+//		String ret = String.valueOf(strArray);
+//		return ret;
+		char key = 0b11110000;
+		StringBuilder sb = new StringBuilder();
+
+		for(int i = 0; i < original.length(); i++)
+		    sb.append((char) (original.charAt(i) ^ key));
+
+		return sb.toString();
+
 	}
 
 	private void start() {
