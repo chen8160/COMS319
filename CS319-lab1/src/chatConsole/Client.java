@@ -29,14 +29,24 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
+
+//		System.out.println(strEncryption(username));
+		handleChat(strEncryption(username));
+
 		while (true) {
-//			if(!in.hasNext())
-//				continue;
+			// if(!in.hasNext())
+			// continue;
 			if (username.equals("admin")) {
-				System.out.printf("1. Broadcast message to all clients\n2. List messages so far (from chat.txt)\n3. Delete a selected message (from chat.txt) - give a message number.\n");
-				int option = in.nextInt();
+				System.out.printf(
+						"1. Broadcast message to all clients\n2. List messages so far (from chat.txt)\n3. Delete a selected message (from chat.txt) - give a message number.\n");
+				Scanner lineScanner = new Scanner(in.nextLine());
+				int option = lineScanner.nextInt();
 				if (option == 1) {
 					// TODO
+					handleChat(strEncryption("1"));
+					while(!in.hasNextLine());
+					String msg = strEncryption(in.nextLine());
+					handleChat(msg);
 				} else if (option == 2) {
 					// TODO
 				} else if (option == 3) {
@@ -46,11 +56,17 @@ public class Client implements Runnable {
 					in.close();
 					System.exit(1);
 				}
+				lineScanner.close();
 			} else {
 				System.out.printf("1. Send a text message to the server\n2. Send an image file to the server\n");
-				int option = in.nextInt();
+				Scanner lineScanner = new Scanner(in.nextLine());
+				int option = lineScanner.nextInt();
 				if (option == 1) {
 					// TODO
+					handleChat(strEncryption("1"));
+					while(!in.hasNextLine());
+					String msg = strEncryption(in.nextLine());
+					handleChat(msg);
 				} else if (option == 2) {
 					// TODO
 				} else {
@@ -58,20 +74,24 @@ public class Client implements Runnable {
 					in.close();
 					System.exit(1);
 				}
+				lineScanner.close();
 			}
 		}
 	}
 
 	public String login() {
 		System.out.print("What is your username? ");
-		String un = in.next();
+		String un = in.nextLine();
 
-//		if (un.equals("admin")) {
-//			System.out.printf(
-//					"1. Broadcast message to all clients\n2. List messages so far (from chat.txt)\n3. Delete a selected message (from chat.txt) - give a message number.\n");
-//		} else {
-//			System.out.printf("1. Send a text message to the server\n2. Send an image file to the server\n");
-//		}
+		// if (un.equals("admin")) {
+		// System.out.printf(
+		// "1. Broadcast message to all clients\n2. List messages so far (from
+		// chat.txt)\n3. Delete a selected message (from chat.txt) - give a
+		// message number.\n");
+		// } else {
+		// System.out.printf("1. Send a text message to the server\n2. Send an
+		// image file to the server\n");
+		// }
 		return un;
 	}
 
@@ -79,6 +99,42 @@ public class Client implements Runnable {
 		// TODO
 		clientThread = new Thread(this);
 		clientThread.start();
+
+		Thread t2 = new Thread() {
+			@Override
+			public void run() {
+				while (true) {
+					Scanner in;
+					try {
+						in = new Scanner(new DataInputStream(serverSocket.getInputStream()));
+						while (in.hasNextLine()) {
+							String msg = strEncryption(in.nextLine());
+							System.out.println(msg);
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		t2.start();
+	}
+
+	public synchronized void handleChat(String msg) {
+		// TODO
+		PrintWriter out = new PrintWriter(streamOut);
+		out.println(msg);
+		out.flush();
+	}
+	
+	private String strEncryption(String original){
+		char[] strArray = original.toCharArray();
+		for(int i = 0; i < strArray.length; i++){
+			strArray[i] ^= 0b11110000;
+		}
+		String ret = String.valueOf(strArray);
+		return ret;
 	}
 
 	public static void main(String[] args) {
