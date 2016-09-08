@@ -61,9 +61,7 @@ public class Server implements Runnable
 			public void run(){
 				while(true){
 					String msg = frame.getMessage();
-//					if(msg != null){
-						handle(msg);
-//					}
+					handle(msg);
 				}
 			}
 		};
