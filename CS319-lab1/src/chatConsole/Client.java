@@ -31,7 +31,7 @@ public class Client implements Runnable {
 	public void run() {
 
 //		System.out.println(strEncryption(username));
-		handleChat(strEncryption(username));
+		handleChat(username);
 
 		while (true) {
 			// if(!in.hasNext())
@@ -43,14 +43,20 @@ public class Client implements Runnable {
 				int option = lineScanner.nextInt();
 				if (option == 1) {
 					// TODO
-					handleChat(strEncryption("1"));
+					handleChat("1");
 					while(!in.hasNextLine());
-					String msg = strEncryption(in.nextLine());
+					String msg = in.nextLine();
 					handleChat(msg);
 				} else if (option == 2) {
 					// TODO
+					handleChat("3");
 				} else if (option == 3) {
 					// TODO
+					handleChat("4");
+					System.out.print("Which line to delete: ");
+					while(!in.hasNextLine());
+					String msg = in.nextLine();
+					handleChat(msg);
 				} else {
 					System.out.println("No such option!!");
 					in.close();
@@ -63,9 +69,9 @@ public class Client implements Runnable {
 				int option = lineScanner.nextInt();
 				if (option == 1) {
 					// TODO
-					handleChat(strEncryption("1"));
+					handleChat("1");
 					while(!in.hasNextLine());
-					String msg = strEncryption(in.nextLine());
+					String msg = in.nextLine();
 					handleChat(msg);
 				} else if (option == 2) {
 					// TODO
@@ -108,7 +114,7 @@ public class Client implements Runnable {
 					try {
 						in = new Scanner(new DataInputStream(serverSocket.getInputStream()));
 						while (in.hasNextLine()) {
-							String msg = strEncryption(in.nextLine());
+							String msg = in.nextLine();
 							System.out.println(msg);
 						}
 					} catch (IOException e) {
@@ -128,22 +134,22 @@ public class Client implements Runnable {
 		out.flush();
 	}
 	
-	private String strEncryption(String original){
-//		char[] strArray = original.toCharArray();
-//		for(int i = 0; i < strArray.length; i++){
-//			strArray[i] ^= 0b11110000;
-//		}
-//		String ret = String.valueOf(strArray);
-//		return ret;
-		char key = 0b11110000;
-		StringBuilder sb = new StringBuilder();
-
-		for(int i = 0; i < original.length(); i++)
-		    sb.append((char) (original.charAt(i) ^ key));
-
-		return sb.toString();
-
-	}
+//	private String strEncryption(String original){
+////		char[] strArray = original.toCharArray();
+////		for(int i = 0; i < strArray.length; i++){
+////			strArray[i] ^= 0b11110000;
+////		}
+////		String ret = String.valueOf(strArray);
+////		return ret;
+//		char key = 0b11110000;
+//		StringBuilder sb = new StringBuilder();
+//
+//		for(int i = 0; i < original.length(); i++)
+//		    sb.append((char) (original.charAt(i) ^ key));
+//
+//		return sb.toString();
+//
+//	}
 
 	public static void main(String[] args) {
 
