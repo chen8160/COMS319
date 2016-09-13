@@ -1,0 +1,66 @@
+ <html>
+ <head>
+ <title>
+	Validation 1
+</title>
+<script src="./validation1.js"></script>
+ </head>
+ 
+ <body>
+ 
+<h1>
+	Validation 1
+</h1>
+<form id="form"	action="">
+	<p>
+		<label for="firstName">First Name</label>
+		<input id="firstName" name="firstName" type="text"/>
+	</p>
+	<p id="para1"/>
+	<p>
+		<label for="lastName">Last Name</label>
+		<input id="lastName" name="lastName" type="text" />
+	</p>
+	<p>
+		<label for="gender">Gender</label>
+		<select id="gender" name="gender">
+			<option value="male">Male</option>
+			<option value="female">Female</option>
+		</select>
+	</p>
+	<p>
+		<label for="state">State</label>
+		<select id="state" name="state">
+			<option value="California">California</option>
+			<option value="Florida">Florida</option>
+			<option value="New York">New York</option>
+			<option value="Texas">Texas</option>
+			<option value="Hawaii">Hawaii</option>
+			<option value="Washington">Washington</option>
+			<option value="Colorado">Colorado</option>
+			<option value="Virginia">Virginia</option>
+			<option value="Iowa">Iowa</option>
+			<option value="Arizona">Arizona</option>
+	</p>
+	<p>
+      <input type="button" id="submit" name="submit" value="Submit" />
+      <input type="reset" value="clear" />
+    </p>
+	<p id="debug" />
+</form>
+<script>
+	var tex1 = document.getElementById("firstName").value;
+	var lastName = document.getElementById("lastName").value;
+	var gender = document.getElementById("gender").value;
+	var state = document.getElementById("state").value;
+	var submitBtn = document.getElementById("submit");
+	submitBtn.onclick = function(){
+		document.getElementById("debug").innerHTML = tex1;
+		var name = validateName(tex1);
+		if(name != false){
+			document.getElementById("para1").innerHTML = name
+		}
+	}
+</script>
+ </body>
+ </html>
