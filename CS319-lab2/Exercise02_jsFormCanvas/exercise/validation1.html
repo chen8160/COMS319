@@ -15,21 +15,24 @@
 	<p>
 		<label for="firstName">First Name</label>
 		<input id="firstName" name="firstName" type="text"/>
+		<img id="img1"/>
 	</p>
-	<p id="para1"/>
+
 	<p>
 		<label for="lastName">Last Name</label>
 		<input id="lastName" name="lastName" type="text" />
+		<img id="img2"/>
 	</p>
-	<p id="para2"/>
+
 	<p>
 		<label for="gender">Gender</label>
 		<select id="gender" name="gender">
 			<option value="male">Male</option>
 			<option value="female">Female</option>
 		</select>
+		<img id="img3"/>
 	</p>
-	<p id="para3"/>
+
 	<p>
 		<label for="state">State</label>
 		<select id="state" name="state">
@@ -43,8 +46,10 @@
 			<option value="Virginia">Virginia</option>
 			<option value="Iowa">Iowa</option>
 			<option value="Arizona">Arizona</option>
+		</select>
+		<img id="img4"/>
 	</p>
-	<p id="para4"/>
+
 	<p>
       <input type="button" id="continue" name="continue" value="Continue" />
       <input type="reset" value="clear" />
@@ -53,7 +58,7 @@
 <script>
   var continueBtn = document.getElementById("continue");
   continueBtn.onclick = function(){
-	validate();
+	validate1();
   }
      // show all elements on clicking continue!
 //     var myForm = document.getElementById("firstName");

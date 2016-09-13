@@ -1,31 +1,57 @@
-function validate(){
-	var myForm = document.getElementById("firstName");
-	var text = document.getElementById("para1");
-	var fn = myForm.value;
-	text.innerHTML = fn;
+function validate1(){
+//	var myForm = document.getElementById("firstName");
+//	var text = document.getElementById("para1");
+//	var fn = myForm.value;
+//	text.innerHTML = fn;
 	
 	var firstName = document.getElementById("firstName").value;
 	var lastName = document.getElementById("lastName").value;
 	var gender = document.getElementById("gender").value;
 	var state = document.getElementById("state").value;
 	
-	var p1 = document.getElementById("para1");
-	var p2 = document.getElementById("para2");
-	var p3 = document.getElementById("para3");
-	var p4 = document.getElementById("para4");
+	var img1 = document.getElementById("img1");
+	var img2 = document.getElementById("img2");
+	var img3 = document.getElementById("img3");
+	var img4 = document.getElementById("img4");
+	
+	var proceed1 = false, proceed2 = false;
 	
 	if(firstName.length != 0 && isAlphaNumeric(firstName)){
-		p1.innerHTML = "right"
+		img1.src = './correct.png';
+		proceed1 = true;
+		
 	} else{
-		p1.innerHTML = "false"
+		img1.src = './wrong.png';
+		proceed1 = false;
 	}
 	
 	if(lastName.length != 0 && isAlphaNumeric(lastName)){
-		p2.innerHTML = "right"
+		img2.src = './correct.png';
+		proceed2 = true;
 	} else{
-		p2.innerHTML = "false"
+		img2.src = './wrong.png';
+		proceed2 = false;
+	}
+	
+	img3.src = './correct.png';
+	img4.src = './correct.png';
+	
+	document.cookie = "state" + "=" + state + ";";
+	console.log("cookie: " + document.cookie);
+	if(proceed1 && proceed2){
+		window.open("./validation2.html", "_self");
 	}
 }
+
+function validate2(){
+	var email = document.getElementById("email").value;
+	var phone = document.getElementById("phone").value;
+	var address = document.getElementById("address").value;
+	
+	
+	
+}
+
 
 function isAlphaNumeric(str) {
   var code, i, len;
