@@ -1,0 +1,71 @@
+ <html>
+ <head>
+ <title>
+	Validation 1
+</title>
+<script src="./validation1.js"></script>
+ </head>
+ 
+ <body>
+ 
+<h1>
+	Validation 1
+</h1>
+<form id="form"	action="">
+	<p>
+		<label for="firstName">First Name</label>
+		<input id="firstName" name="firstName" type="text"/>
+		<img id="img1"/>
+	</p>
+
+	<p>
+		<label for="lastName">Last Name</label>
+		<input id="lastName" name="lastName" type="text" />
+		<img id="img2"/>
+	</p>
+
+	<p>
+		<label for="gender">Gender</label>
+		<select id="gender" name="gender">
+			<option value="male">Male</option>
+			<option value="female">Female</option>
+		</select>
+		<img id="img3"/>
+	</p>
+
+	<p>
+		<label for="state">State</label>
+		<select id="state" name="state">
+			<option value="California">California</option>
+			<option value="Florida">Florida</option>
+			<option value="New York">New York</option>
+			<option value="Texas">Texas</option>
+			<option value="Hawaii">Hawaii</option>
+			<option value="Washington">Washington</option>
+			<option value="Colorado">Colorado</option>
+			<option value="Virginia">Virginia</option>
+			<option value="Iowa">Iowa</option>
+			<option value="Arizona">Arizona</option>
+		</select>
+		<img id="img4"/>
+	</p>
+
+	<p>
+      <input type="button" id="continue" name="continue" value="Continue" />
+      <input type="reset" value="clear" />
+    </p>
+</form>
+<script>
+  var continueBtn = document.getElementById("continue");
+  continueBtn.onclick = function(){
+	validate1();
+  }
+     // show all elements on clicking continue!
+//     var myForm = document.getElementById("firstName");
+//	 var text = document.getElementById("debug");
+//	 var fn = myForm.value;
+//	 text.innerHTML = fn;
+  
+</script>
+ </body>
+ </html>
