@@ -1,4 +1,4 @@
-function validate1(){
+function validate(){
 //	var myForm = document.getElementById("firstName");
 //	var text = document.getElementById("para1");
 //	var fn = myForm.value;
@@ -41,15 +41,6 @@ function validate1(){
 	if(proceed1 && proceed2){
 		window.open("./validation2.html", "_self");
 	}
-}
-
-function validate2(){
-	var email = document.getElementById("email").value;
-	var phone = document.getElementById("phone").value;
-	var address = document.getElementById("address").value;
-	
-	
-	
 }
 
 
