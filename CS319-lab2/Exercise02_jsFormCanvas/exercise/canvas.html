@@ -10,9 +10,11 @@ canvas {
 </style>
 </head>
 <body onload="startGame()">
+<p>
     <button type="button" onclick="createComponent()">Start</button>
-    <button type="button" onclick="turnLeft()">Turn left</button>
-    <button type="button" onclick="turnRight()">Turn Right</button>
+    <button type="button" onclick="turn(0)">Turn left</button>
+    <button type="button" onclick="turn(1)">Turn Right</button>
+</p>
 <script>
 
 var started = false;
@@ -27,7 +29,10 @@ var myGameArea = {
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
         this.interval;
-        document.body.insertBefore(this.canvas, document.body.childNodes[1]);
+        document.body.insertBefore(this.canvas, document.body.childNodes[2]);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width,this.canvas.height);
     }
 }
 
@@ -39,6 +44,10 @@ function createComponent(){
         myGameArea.interval = setInterval(updateGameArea, 20);
         updateGameArea();
         started = true;
+    } else{
+        myGameArea.clear();
+        myGamePiece.clear();
+        i = 0;
     }
     
 }
@@ -60,6 +69,12 @@ function component(width, height, color, x, y) {
             this.x += this.speedX;
             this.y += this.speedY;
         }
+        this.clear = function() {
+            this.x = 0;
+            this.y = 133;
+            this.speedX = 1;
+            this.speedY = 0;
+        }
     }
 }
     
@@ -68,7 +83,22 @@ function updateGameArea() {
     myGamePiece.newPos();
     myGamePiece.update();
 }
-
+    
+i = 0;
+function turn(direction){
+    if(direction == 0){
+        i++;
+        i = i % 4;
+    } else if(direction == 1){
+        i--;
+        i = (i + 4) % 4;
+    }
+    var speed_X = [1, 0, -1, 0];
+    var speed_Y = [0, -1, 0, 1];
+    myGamePiece.speedX = speed_X[i];
+    myGamePiece.speedY = speed_Y[i];
+}
+    
 </script>
 
 </body>
