@@ -3,9 +3,9 @@ function validate(){
 	var phone = document.getElementById("phone").value;
 	var address = document.getElementById("address").value;
 	
-	var regEmail = /^[a-z0-9]{3}@[a-z0-9]{3}\.[a-z0-9]{3}$/i;
+	var regEmail = /^[a-z0-9]+@[a-z0-9]+\.[a-z0-9]+$/i;
     var regPhone = /^([0-9]{3}-[0-9]{3}-[0-9]{4}|[0-9]{10})$/;
-	var regAddress = /^[a-zA-Z0-9]+,\s*[A-Z]{2}$/
+	var regAddress = /^[a-zA-Z0-9\s]+,\s*[A-Z]{2}$/
     console.log(regEmail.test(email));
     console.log(regPhone.test(phone));
     console.log(regAddress.test(address));

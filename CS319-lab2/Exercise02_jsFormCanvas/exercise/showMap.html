@@ -1,26 +1,28 @@
 <html>
 <head>
-  <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Xu2s_929o3T8le7I8JKhe_7bP0qDlJs&callback=initMap"
-  type="text/javascript"></script>
+    <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Xu2s_929o3T8le7I8JKhe_7bP0qDlJs"
+  type="text/javascript" async defer></script>
+
   <script type='text/javascript'>
    google.charts.load('upcoming', {'packages': ['geomap']});
    google.charts.setOnLoadCallback(drawMap);
 
     function drawMap() {
         var address = localStorage.getItem("address");
-        var city = /^[a-zA-Z0-9]+/.exec(address).toString();
-        var state = /[A-Z]{2}/.exec(address).toString();
         
       var data = google.visualization.arrayToDataTable([
-        ['State'],
-        [state]
+        ['Location'],
+        [address]
       ]);
 
       var options = {};
       options['region'] = 'US';
       options['colors'] = [0xFF8747, 0xFFB581, 0xc06000]; //orange colors
-      options['dataMode'] = 'markers';
+      options['dataMode'] = 'markers'
+      options['width'] = 900;
+        options['height'] = 500;
 
       var container = document.getElementById('map_canvas');
       var geomap = new google.visualization.GeoMap(container);
@@ -31,7 +33,7 @@
 </head>
 
 <body>
-    <div id='map_canvas'></div>
+    <div id='map_canvas' style="width: 900px; height: 500px";></div>
 </body>
 
 </html>
