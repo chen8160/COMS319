@@ -1,105 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<style>
-canvas {
-    border: 1px solid #d3d3d3;
-    background-color: #f1f1f1;
-}
-</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
+
 <body onload="startGame()">
-<p>
-    <button type="button" onclick="createComponent()">Start</button>
-    <button type="button" onclick="turn(0)">Turn left</button>
-    <button type="button" onclick="turn(1)">Turn Right</button>
-</p>
-<script>
+    <p>
+        <button type="button" onclick="createComponent()">Start</button>
+        <button type="button" onclick="turn(0)">Turn left</button>
+        <button type="button" onclick="turn(1)">Turn Right</button>
+    </p>
+    <script>
+        var started = false;
 
-var started = false;
-function startGame() {
-    myGameArea.start();
-}
+        function startGame() {
+            myGameArea.start();
+        }
 
-var myGameArea = {
-    canvas : document.createElement("canvas"),
-    start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
-        this.context = this.canvas.getContext("2d");
-        this.interval;
-        document.body.insertBefore(this.canvas, document.body.childNodes[2]);
-    },
-    clear : function() {
-        this.context.clearRect(0, 0, this.canvas.width,this.canvas.height);
-    }
-}
+        var myGameArea = {
+            canvas: document.createElement("canvas"),
+            start: function () {
+                this.canvas.width = 480;
+                this.canvas.height = 270;
+                this.context = this.canvas.getContext("2d");
+                this.interval;
+                document.body.insertBefore(this.canvas, document.body.childNodes[2]);
+            },
+            clear: function () {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
 
-var myGamePiece;
+        var myGamePiece;
 
-function createComponent(){
-    if(!started){
-        myGamePiece = new component(4, 4, "red", 0, 133);
-        myGameArea.interval = setInterval(updateGameArea, 20);
-        updateGameArea();
-        started = true;
-    } else{
-        myGameArea.clear();
-        myGamePiece.clear();
+        function createComponent() {
+            if (!started) {
+                myGamePiece = new component(4, 4, "red", 0, 133);
+                myGameArea.interval = setInterval(updateGameArea, 20);
+                updateGameArea();
+                started = true;
+            } else {
+                myGameArea.clear();
+                myGamePiece.clear();
+                i = 0;
+            }
+
+        }
+
+        function component(width, height, color, x, y) {
+            if (myGamePiece == null) {
+                this.width = width;
+                this.height = height;
+                this.x = x;
+                this.y = y;
+                this.speedX = 1;
+                this.speedY = 0;
+                this.update = function () {
+                    ctx = myGameArea.context;
+                    ctx.fillStyle = color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+                this.newPos = function () {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                }
+                this.clear = function () {
+                    this.x = 0;
+                    this.y = 133;
+                    this.speedX = 1;
+                    this.speedY = 0;
+                }
+            }
+        }
+
+        function updateGameArea() {
+            //    myGameArea.clear();
+            myGamePiece.newPos();
+            myGamePiece.update();
+        }
+
         i = 0;
-    }
-    
-}
 
-function component(width, height, color, x, y) {
-    if(myGamePiece == null){
-        this.width = width;
-        this.height = height;
-        this.x = x;
-        this.y = y; 
-        this.speedX = 1;
-        this.speedY = 0;
-        this.update = function(){
-            ctx = myGameArea.context;
-            ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+        function turn(direction) {
+            if (direction == 0) {
+                i++;
+                i = i % 4;
+            } else if (direction == 1) {
+                i--;
+                i = (i + 4) % 4;
+            }
+            var speed_X = [1, 0, -1, 0];
+            var speed_Y = [0, -1, 0, 1];
+            myGamePiece.speedX = speed_X[i];
+            myGamePiece.speedY = speed_Y[i];
         }
-        this.newPos = function() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-        }
-        this.clear = function() {
-            this.x = 0;
-            this.y = 133;
-            this.speedX = 1;
-            this.speedY = 0;
-        }
-    }
-}
-    
-function updateGameArea() {
-//    myGameArea.clear();
-    myGamePiece.newPos();
-    myGamePiece.update();
-}
-    
-i = 0;
-function turn(direction){
-    if(direction == 0){
-        i++;
-        i = i % 4;
-    } else if(direction == 1){
-        i--;
-        i = (i + 4) % 4;
-    }
-    var speed_X = [1, 0, -1, 0];
-    var speed_Y = [0, -1, 0, 1];
-    myGamePiece.speedX = speed_X[i];
-    myGamePiece.speedY = speed_Y[i];
-}
-    
-</script>
+    </script>
 
 </body>
+
 </html>
