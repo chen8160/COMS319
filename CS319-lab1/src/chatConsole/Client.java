@@ -1,8 +1,19 @@
+
 package chatConsole;
 
 import java.net.*;
+import java.nio.file.Files;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Client implements Runnable {
 
@@ -30,79 +41,66 @@ public class Client implements Runnable {
 	@Override
 	public void run() {
 
-//		System.out.println(strEncryption(username));
-		handleChat(username);
+		strEncryptionSend("usrnme" + username);
+
+		if (username.equals("admin")) {
+			System.out.printf(
+					"1. To broadcast, please enter \"broadcast\"\n2. To list messages so far, please enter \"list\"\n3. To delete message, please enter \"delete\"\n");
+		} else {
+			System.out.printf("To send an image, please enter \"image\".Otherwise, it is considered a message.\n");
+		}
 
 		while (true) {
-			// if(!in.hasNext())
-			// continue;
+
 			if (username.equals("admin")) {
-				System.out.printf(
-						"1. Broadcast message to all clients\n2. List messages so far (from chat.txt)\n3. Delete a selected message (from chat.txt) - give a message number.\n");
-				Scanner lineScanner = new Scanner(in.nextLine());
-				int option = lineScanner.nextInt();
-				if (option == 1) {
-					// TODO
-					handleChat("1");
-					while(!in.hasNextLine());
-					String msg = in.nextLine();
-					handleChat(msg);
-				} else if (option == 2) {
-					// TODO
-					handleChat("3");
-				} else if (option == 3) {
-					// TODO
-					handleChat("4");
-					System.out.print("Which line to delete: ");
-					while(!in.hasNextLine());
-					String msg = in.nextLine();
-					handleChat(msg);
-				} else {
-					System.out.println("No such option!!");
-					in.close();
-					System.exit(1);
+				
+				while (!in.hasNextLine());
+				String msg = in.nextLine();
+
+				if (msg.equals("broadcast")) {
+					System.out.println("what do you want to broadcast?");
+					while (!in.hasNextLine());
+					String temp = in.nextLine();
+					strEncryptionSend("msg" + "admin" + ": " + temp);
+				}else if(msg.equals("list")){
+					strEncryptionSend("list" + "admin");
+				}else if(msg.equals("delete")){
+					System.out.println("which line do you want to delete?");
+					while (!in.hasNextLine());
+					String temp = in.nextLine();
+					strEncryptionSend("delete" + temp);
+				}else {
+					System.out.println("Please enter a valid input!");
+					System.out.println("You can enter \"broadcast\"");
+					System.out.println("You can enter \"list\"");
+					System.out.println("You can enter \"delete\"");
 				}
-				lineScanner.close();
 			} else {
-				System.out.printf("1. Send a text message to the server\n2. Send an image file to the server\n");
-				Scanner lineScanner = new Scanner(in.nextLine());
-				int option = lineScanner.nextInt();
-				if (option == 1) {
-					// TODO
-					handleChat("1");
-					while(!in.hasNextLine());
-					String msg = in.nextLine();
-					handleChat(msg);
-				} else if (option == 2) {
-					// TODO
+
+				while (!in.hasNextLine());
+				String msg = in.nextLine();
+
+				if (msg.equals("image")) {
+					System.out.println("Please enter your image name: (i.e. happy.png)");
+					String imageName = in.nextLine();
+
+					// send image file to server
+					File f = new File("res/" + imageName);
+					imgEncryptionSend(f);
 				} else {
-					System.out.println("No such option!!");
-					in.close();
-					System.exit(1);
+					strEncryptionSend("msg" + username + ": " + msg);
 				}
-				lineScanner.close();
+
 			}
-		}
-	}
+		} // End while(true)
+	}// End run()
 
 	public String login() {
-		System.out.print("What is your username? ");
-		String un = in.nextLine();
-
-		// if (un.equals("admin")) {
-		// System.out.printf(
-		// "1. Broadcast message to all clients\n2. List messages so far (from
-		// chat.txt)\n3. Delete a selected message (from chat.txt) - give a
-		// message number.\n");
-		// } else {
-		// System.out.printf("1. Send a text message to the server\n2. Send an
-		// image file to the server\n");
-		// }
-		return un;
+		System.out.print("Please enter your username: ");
+		return in.nextLine();
 	}
 
 	public void start() {
-		// TODO
 		clientThread = new Thread(this);
 		clientThread.start();
 
@@ -115,10 +113,17 @@ public class Client implements Runnable {
 						in = new Scanner(new DataInputStream(serverSocket.getInputStream()));
 						while (in.hasNextLine()) {
 							String msg = in.nextLine();
+							if (msg.startsWith("image send: ")) {
+								BufferedImage img = ImageIO
+										.read(ImageIO.createImageInputStream(serverSocket.getInputStream()));
+								JFrame f = new JFrame();
+								f.getContentPane().add(new JLabel(new ImageIcon(img)));
+								f.pack();
+								f.setVisible(true);
+							}
 							System.out.println(msg);
 						}
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -128,28 +133,62 @@ public class Client implements Runnable {
 	}
 
 	public synchronized void handleChat(String msg) {
-		// TODO
 		PrintWriter out = new PrintWriter(streamOut);
 		out.println(msg);
 		out.flush();
 	}
-	
-//	private String strEncryption(String original){
-////		char[] strArray = original.toCharArray();
-////		for(int i = 0; i < strArray.length; i++){
-////			strArray[i] ^= 0b11110000;
-////		}
-////		String ret = String.valueOf(strArray);
-////		return ret;
-//		char key = 0b11110000;
-//		StringBuilder sb = new StringBuilder();
-//
-//		for(int i = 0; i < original.length(); i++)
-//		    sb.append((char) (original.charAt(i) ^ key));
-//
-//		return sb.toString();
-//
-//	}
+
+	private synchronized void strEncryptionSend(String msg) {
+		char key = 0xf0;
+		byte[] msgBytes = msg.getBytes();
+		for (byte b : msgBytes)
+			b ^= key;
+
+		try {
+			streamOut.write(msgBytes);
+			streamOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private synchronized void imgEncryptionSend(File f) {
+		byte[] bf;
+		try {
+			bf = Files.readAllBytes(f.toPath());
+			int r = bf.length % 3;
+			byte[] result;
+			if (r == 1) {
+				result = new byte[bf.length * 4 / 3 + 2];
+			} else if (r == 2) {
+				result = new byte[bf.length * 4 / 3 + 3];
+			} else {
+				result = new byte[bf.length * 4 / 3];
+			}
+
+
+			for (int i = 0; i < bf.length; i += 3) {
+				result[i / 3 * 4] = (byte) ((0xfc & bf[i]));
+				if (i / 3 * 4 + 1 < result.length)
+					result[i / 3 * 4 + 1] = (byte) ((0xc0 & (bf[i] << 6)) | (0x3c & (bf[i+1] >> 2)));
+				if (i / 3 * 4 + 2 < result.length)
+					result[i / 3 * 4 + 2] = (byte) ((0xf0 & (bf[i+1] << 4)) | (0x0c & (bf[i+2] >> 4)));
+				if (i / 3 * 4 + 3 < result.length)
+					result[i / 3 * 4 + 3] = (byte) ((0xfc & (bf[i+2] << 2)));
+			}
+			
+			if (bf.length % 3 == 2) {
+				result[result.length - 1] = 0x00;
+				result[result.length - 2] = 0x00;
+			} else if (bf.length % 3 == 1) {
+				result[result.length - 1] = 0x00;
+			}
+			streamOut.write(result);
+			streamOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 
