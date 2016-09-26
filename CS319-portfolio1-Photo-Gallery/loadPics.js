@@ -17,5 +17,4 @@ function loadPics() {
         }
     }
 
-    document.getElementById("pic").innerHTML = s;
 }

@@ -69,10 +69,10 @@
     <?php
 // Read directory, spit out links
     $entries = array();
-if ($handle = opendir('./photos')) {
+if ($handle = opendir('./pics')) {
     while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != ".." && $entry != "about.JPG") {
-            $string = '<img src="photos/'.$entry.'" class="img-responsive img-thumbnail" style="margin-bottom: 25px">';
+            $string = '<img src="pics/'.$entry.'" class="img-responsive img-thumbnail" style="margin-bottom: 25px">';
             array_push($entries, $string);
         }
     }
