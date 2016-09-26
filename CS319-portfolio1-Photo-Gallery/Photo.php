@@ -7,7 +7,7 @@
     <meta name=keywords content="Photo gallery">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home</title>
+    <title>Portfolio 1</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -15,13 +15,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="./loadPics.js"></script>
     <style>
-        .carousel-inner img {
-            width: 100%;
-            max-height: 100vh !important;
-            margin: auto;
-        }
-        
         body {
             background-color: black;
         }
@@ -30,24 +25,11 @@
             margin-bottom: 0;
             border: 0;
         }
-        
-        .noPadding {
-            padding-top: 0;
-            padding-left: 0;
-            padding-right: 0;
-            padding-bottom: 0;
-        }
-        
-        .jumbotron {
-            height: 100vh;
-            margin: 0;
-        }
 
     </style>
 </head>
 
-<body style="height='100%'">
-
+<body>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -61,46 +43,51 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="Photo.php">Photo</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active"><a href="#">Photo</a></li>
                     <li><a href="About.html">About</a></li>
                     <li><a href="Contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="height='100vh'">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        </ol>
-
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            <div class="jumbotron item active noPadding" style="background-image: url('./photos/Snapseed_28.jpg');background-size: cover;background-repeat: no-repeat; background-position: 50% 50%;">
-
+    <div class="container-fluid" style="margin: auto">
+        <div class="col-xs-6" style="padding: 0; margin-top: 5vh">
+            <div class="col-xs-12 col-md-6" style="padding: 0 8px 0 8px" id="col-1">
             </div>
-            <div class="jumbotron item noPadding" style="background-image: url('./photos/1471256115.614908_share.jpg');background-size: cover;background-repeat: no-repeat; background-position: 50% 50%;">
-
+            <div class="col-xs-12 col-md-6" style="padding: 0 8px 0 8px" id="col-2">
             </div>
-            <div class="jumbotron item noPadding" style="background-image: url('./photos/IMG_7608.JPG');background-size: cover;background-repeat: no-repeat; background-position: 50% 50%;">
-
-            </div>
-
         </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+        <div class="col-xs-6" style="padding: 0; margin-top: 5vh">
+            <div class="col-xs-12 col-md-6" style="padding: 0 8px 0 8px" id="col-3">
+            </div>
+            <div class="col-xs-12 col-md-6" style="padding: 0 8px 0 8px" id="col-4">
+            </div>
+        </div>
     </div>
+
+    <?php
+// Read directory, spit out links
+    $entries = array();
+if ($handle = opendir('./photos')) {
+    while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != ".." && $entry != "about.JPG") {
+            $string = '<img src="photos/'.$entry.'" class="img-responsive img-thumbnail" style="margin-bottom: 25px">';
+            array_push($entries, $string);
+        }
+    }
+    $count = count($entries);
+    closedir($handle);
+}
+?>
+
+        <script>
+            var jArray = <?php echo json_encode($entries ); ?>;
+            var length = <?php echo json_encode($count); ?>;
+            loadPics();
+
+        </script>
+
 </body>
 
 </html>
