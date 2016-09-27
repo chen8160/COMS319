@@ -10,12 +10,14 @@
     <title>Portfolio 1</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./modal.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="./loadPics.js"></script>
+    <script src="./lightBox.js"></script>
     <style>
         body {
             background-color: black;
@@ -39,7 +41,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Xiaomeng Wang</a>
+                <a class="navbar-brand" href="index.html">Xiaomeng Wang</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -69,17 +71,54 @@
     <?php
 // Read directory, spit out links
     $entries = array();
+    $box = array();
+    $index = 1;
 if ($handle = opendir('./pics')) {
     while (false !== ($entry = readdir($handle))) {
-        if ($entry != "." && $entry != ".." && $entry != "about.JPG") {
-            $string = '<img src="pics/'.$entry.'" class="img-responsive img-thumbnail" style="margin-bottom: 25px">';
+        if ($entry != "." && $entry != ".." && $entry != "about.jpg") {
+            $string = '<img src="pics/'.$entry.'" class="img-responsive img-thumbnail" style="margin-bottom: 25px" onclick="openModal();currentSlide('.$index++.')" class="hover-shadow cursor">';
             array_push($entries, $string);
+            $boxString = '<div class="mySlides"><img src="pics/'.$entry.'" style="width:100%"></div>';
+            array_push($box, $boxString);
         }
     }
     $count = count($entries);
     closedir($handle);
 }
 ?>
+
+        <div id="myModal" class="modal">
+            <span class="close cursor" onclick="closeModal()">&times;</span>
+            <div class="modal-content">
+
+                <!--
+                <div class="mySlides">
+                    <img src="img_nature_wide.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <img src="img_fjords_wide.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <img src="img_mountains_wide.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <img src="img_lights_wide.jpg" style="width:100%">
+                </div>
+-->
+                <?php 
+                    for($i = 0; $i < $count; $i++){
+                        echo $box[$i];
+                    }
+                ?>
+
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </div>
+        </div>
 
         <script>
             var jArray = <?php echo json_encode($entries ); ?>;
