@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <title>Login</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <p>
+        <label for="UN">User Name</label>
+        <input id="UN" name="userName" type="text" />
+    </p>
+    <p>
+        <label for="PW">Password</label>
+        <input id="PW" name="passWord" type="text" />
+    </p>
+    <p>
+        <input type="button" id="login" name="login" value="Login" />
+    </p>
+
+    <script>
+        $('#login').click(function () {
+            var username = $('#UN').val();
+            if (username == "admin" && username == $('#PW').val()) {
+                console.log("Login as admin");
+                document.cookie = "username" + "=" + username;
+            } else if (/^U/.test(username)) {
+                console.log("Login as undergraduate student");
+            } else {
+                alert("Not a correct username and password");
+                console.log("not correct");
+            }
+        });
+    </script>
+</body>
+
+</html>
