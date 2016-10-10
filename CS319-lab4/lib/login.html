@@ -19,18 +19,22 @@
     </p>
 
     <script>
-        $('#login').click(function () {
+        $('#login').click(function() {
             var username = $('#UN').val();
             if (username == "admin" && username == $('#PW').val()) {
                 console.log("Login as admin");
-                document.cookie = "username" + "=" + username;
+                document.cookie = "username" + "=" + username + ";";
+                window.open("./client.html", "_self");
             } else if (/^U/.test(username)) {
                 console.log("Login as undergraduate student");
+                document.cookie = "username" + "=" + username + ";";
+                window.open("./client.html", "_self");
             } else {
                 alert("Not a correct username and password");
                 console.log("not correct");
             }
         });
+
     </script>
 </body>
 
