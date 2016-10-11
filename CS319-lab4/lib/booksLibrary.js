@@ -17,24 +17,89 @@ function Library(username) {
 
 Library.prototype.createTable = function () {
 
-    var l = new Library();
+        l = new Library();
 
-    if (window.localStorage.getItem("shelfs") === null) {
-        console.log("no lib yet");
-        var mytable = $("<table border='2'></table>"); // creates DOM elements
-        var mytablebody = $('<tbody></tbody>');
-        var curr_row = $('<tr></tr>');
-        for (i = 0; i < 4; i++) {
-            var curr_cell = $('<td width="80"></td>');
-            curr_cell.append(l.shelfs[i].name);
-            curr_row.append(curr_cell);
+        if (window.localStorage.getItem("shelfs") === null) {
+            console.log("no lib yet");
+            var mytable = $("<table id='table' border='2'></table>"); // creates DOM elements
+            var mytablebody = $('<tbody></tbody>');
+            var curr_row = $('<tr></tr>');
+            for (var i = 0; i < 4; i++) {
+                var curr_cell = $('<th width="80" height="18"></th>');
+                curr_cell.append(l.shelfs[i].name);
+                curr_row.append(curr_cell);
+                mytablebody.append(curr_row);
+            }
+            for (var j = 0; j < 10; j++) {
+
+                curr_row = $('<tr></tr>');
+                for (i = 0; i < 4; i++) {
+                    var curr_cell = $('<td class="book" width="80" height="18"></td>');
+                    curr_row.append(curr_cell);
+                }
+                mytablebody.append(curr_row);
+            }
+            mytable.append(mytablebody);
+            mytable.insertAfter($('#lib'));
+        } else {
+            //TODO
         }
-        mytablebody.append(curr_row);
-        mytable.append(mytablebody);
-        mytable.insertAfter($('#lib'));
-    } else {
-        //TODO
+
+        $("#table td").click(function () {
+            var rowIndex = $(this).parent().index('tr');
+            var colIndex = this.cellIndex;
+            var value = $(this).html();
+            console.log("Index R: " + rowIndex + " C: " + colIndex + " Value: " + value);
+
+            if (value === "" && /^username=admin/.test(document.cookie)) {
+                console.log("Add book here");
+                $("#form").show();
+            }
+            $("#form #add").click(function (rowIndex, colIndex) {
+                var name = $("#bookName").val();
+                var id = $("#bookID").val();
+                var newBook = new Book(name, id, false, null, true);
+
+                if (parseInt(id) % 4 === 0) {
+                    l.shelfs[0].books.push(newBook);
+                } else if (parseInt(id) % 4 === 1) {
+                    l.shelfs[1].books.push(newBook);
+                } else if (parseInt(id) % 4 === 2) {
+                    l.shelfs[2].books.push(newBook);
+                } else if (parseInt(id) % 4 === 3) {
+                    l.shelfs[3].books.push(newBook);
+                }
+
+                document.getElementById("table").children[0].children[rowIndex].children[colIndex].innerHTML += newBook.bookName;
+
+            });
+
+        });
+
+        //    if (/^username=U/.test(document.cookie)) {
+        //        console.log("Undergrad student");
+        //    } else if (/^username=admin/.test(document.cookie)) {
+        //        console.log("Admin");
+        //    }
+    } // end of createTable
+
+Library.prototype.addBook = function (rowIndex, colIndex) {
+    var name = $("#bookName").val();
+    var id = $("#bookID").val();
+    var newBook = new Book(name, id, false, null, true);
+
+    if (parseInt(id) % 4 === 0) {
+        l.shelfs[0].books.push(newBook);
+    } else if (parseInt(id) % 4 === 1) {
+        l.shelfs[1].books.push(newBook);
+    } else if (parseInt(id) % 4 === 2) {
+        l.shelfs[2].books.push(newBook);
+    } else if (parseInt(id) % 4 === 3) {
+        l.shelfs[3].books.push(newBook);
     }
+
+    document.getElementById("table").children[0].children[rowIndex].children[colIndex].innerHTML += newBook.bookName;
+
 }
 
 function Shelf(name) {
@@ -42,7 +107,8 @@ function Shelf(name) {
     this.books = new Array();
 }
 
-function Book(id, isR, studentName, isAvailable) {
+function Book(name, id, isR, studentName, isAvailable) {
+    this.bookName = name;
     this.bookID = id;
     this.isReference = isR;
     this.brrowedBy = studentName;
