@@ -18,6 +18,8 @@ function Library(username) {
 Library.prototype.createTable = function () {
 
         l = new Library();
+        var rowIndex = 0;
+        var colIndex = 0;
 
         if (window.localStorage.getItem("shelfs") === null) {
             console.log("no lib yet");
@@ -41,38 +43,23 @@ Library.prototype.createTable = function () {
             }
             mytable.append(mytablebody);
             mytable.insertAfter($('#lib'));
+
+
         } else {
             //TODO
         }
 
         $("#table td").click(function () {
-            var rowIndex = $(this).parent().index('tr');
-            var colIndex = this.cellIndex;
+            rowIndex = $(this).parent().index('tr');
+            colIndex = this.cellIndex;
             var value = $(this).html();
             console.log("Index R: " + rowIndex + " C: " + colIndex + " Value: " + value);
+
 
             if (value === "" && /^username=admin/.test(document.cookie)) {
                 console.log("Add book here");
                 $("#form").show();
             }
-            $("#form #add").click(function (rowIndex, colIndex) {
-                var name = $("#bookName").val();
-                var id = $("#bookID").val();
-                var newBook = new Book(name, id, false, null, true);
-
-                if (parseInt(id) % 4 === 0) {
-                    l.shelfs[0].books.push(newBook);
-                } else if (parseInt(id) % 4 === 1) {
-                    l.shelfs[1].books.push(newBook);
-                } else if (parseInt(id) % 4 === 2) {
-                    l.shelfs[2].books.push(newBook);
-                } else if (parseInt(id) % 4 === 3) {
-                    l.shelfs[3].books.push(newBook);
-                }
-
-                document.getElementById("table").children[0].children[rowIndex].children[colIndex].innerHTML += newBook.bookName;
-
-            });
 
         });
 
@@ -81,26 +68,30 @@ Library.prototype.createTable = function () {
         //    } else if (/^username=admin/.test(document.cookie)) {
         //        console.log("Admin");
         //    }
+
+        $("#form #add").click(function () {
+            var name = $("#bookName").val();
+            var id = $("#bookID").val();
+            var newBook = new Book(name, id, false, null, true);
+
+            if (parseInt(id) % 4 === 0) {
+                l.shelfs[0].books.push(newBook);
+            } else if (parseInt(id) % 4 === 1) {
+                l.shelfs[1].books.push(newBook);
+            } else if (parseInt(id) % 4 === 2) {
+                l.shelfs[2].books.push(newBook);
+            } else if (parseInt(id) % 4 === 3) {
+                l.shelfs[3].books.push(newBook);
+            }
+            console.log("add to R: " + rowIndex + " C: " + colIndex);
+            document.getElementById("table").children[0].children[rowIndex].children[colIndex].innerHTML += newBook.bookName;
+        });
+
     } // end of createTable
 
-Library.prototype.addBook = function (rowIndex, colIndex) {
-    var name = $("#bookName").val();
-    var id = $("#bookID").val();
-    var newBook = new Book(name, id, false, null, true);
 
-    if (parseInt(id) % 4 === 0) {
-        l.shelfs[0].books.push(newBook);
-    } else if (parseInt(id) % 4 === 1) {
-        l.shelfs[1].books.push(newBook);
-    } else if (parseInt(id) % 4 === 2) {
-        l.shelfs[2].books.push(newBook);
-    } else if (parseInt(id) % 4 === 3) {
-        l.shelfs[3].books.push(newBook);
-    }
 
-    document.getElementById("table").children[0].children[rowIndex].children[colIndex].innerHTML += newBook.bookName;
 
-}
 
 function Shelf(name) {
     this.name = name;
