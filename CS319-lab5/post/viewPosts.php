@@ -6,6 +6,7 @@
 
     <head>
         <title>View Posts</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -14,16 +15,30 @@
         <?php
         
             $file = json_decode(file_get_contents("posts.txt"));
-            $table = "<table id=\"posts\">";
+            $table = "<table id=\"posts\" border=2>";
             if($file != null){
                 foreach($file as $userName => $post){
-                    $table .= "<tr><td>" . $post->title . "</td><td>" . $post->desc . "</td><td>" . $post->timeCreated . "</td></tr>";
+                    $table .= "<tr><td>" . $post->title . "</td><td>" . $post->content . "</td><td>" . $post->timeCreated . "</td>";
+                    
+                    if($_SESSION['username'] == $post->username){
+                        $table .= "<td><input type=\"button\" class=\"edit\" value=\"Edit\" /></td></tr>";
+                    } else{
+                        $table .= "</tr>";
+                    }
                 }
             }
             $table .= "</table>";
             echo $table;
         ?>
-
+            <div hidden="true" id="makePost">
+                <label for="title">Title:</label>
+                <br>
+                <input id="title" type="text" name="title" />
+                <br>
+                <label for="content">Content:</label>
+                <br>
+                <textarea id="content" rows="10" cols="100"></textarea>
+            </div>
             <input type="button" id="post" name="post" value="Post" />
             <h1>Messages</h1>
             <?php 
@@ -32,6 +47,27 @@
                 <input type="button" id="msg" name="msg" value="Send Message" />
 
                 <script>
+                    $("#post").click(function () {
+
+                        if ($("#makePost").is(':hidden')) {
+                            $("#post").val("Submit");
+                        } else {
+                            $("#post").val("Post");
+                            $.post("updatePosts.php", {
+                                title: $("#title").val(),
+                                content: $("#content").val(),
+                                isNew: true
+                            }, function (data, status) {
+                                var newEntry = "<tr><td>" + $("#title").val() + "</td><td>" + $("#content").val() + "</td><td>" + data + "</td></tr>";
+                                $("#posts").append(newEntry);
+                                $("#title").val("");
+                                $("#content").val("");
+                            });
+                        }
+
+                        $("#makePost").toggle();
+
+                    });
                 </script>
 
     </body>
