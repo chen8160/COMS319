@@ -81,13 +81,21 @@
                         $("#update").show();
 
                         editPost = function() {
+                            console.log(Index);
                             $.post("updatePosts.php", {
                                 title: $("#title").val(),
                                 content: $("#content").val(),
-                                isNew: false
+                                isNew: false,
+                                index: Index
                             }, function(data, status) {
-
+                                $($($(that).parent().parent()).children()[0]).html($("#title").val());
+                                $($($(that).parent().parent()).children()[1]).html($("#content").val());
+                                $("#title").val("");
+                                $("#content").val("");
                             });
+                            $("#post").show();
+                            $("#makePost").hide();
+                            $("#update").hide();
                         }
                     }
 

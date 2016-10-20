@@ -18,12 +18,14 @@
         echo $newPost['timeCreated'];
     } else{
         //TODO
+        $index = (int) $_REQUEST['index'];
+        $file[$index]->title = $title;
+        $file[$index]->content = $content;
     }
 
 
     file_put_contents("posts.txt", json_encode($file));
 
-    echo "";
 //echo $_REQUEST['isNew'];
 
     
