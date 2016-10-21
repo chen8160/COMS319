@@ -42,13 +42,22 @@
             <input type="button" id="post" name="post" value="Post" />
             <input type="button" hidden="true" id="update" onClick='editPost()' value="Submit" />
             <h1>Messages</h1>
-            <?php 
-                //TODO
+            <?php
+                require 'inbox.php';
             ?>
-                <input type="button" id="msg" name="msg" value="Send Message" />
+                <div id="sendMSG">
+                    <label for="to">To:</label>
+                    <br>
+                    <input id="to" type="text" name="to" />
+                    <br>
+                    <label for="msg">Message:</label>
+                    <br>
+                    <textarea id="msg" rows="10" cols="100"></textarea>
+                </div>
+                <input type="button" id="send" name="send" value="Send Message" />
 
                 <script>
-                    $("#post").click(function() {
+                    $("#post").click(function () {
 
                         if ($("#makePost").is(':hidden')) {
                             $("#post").val("Submit");
@@ -58,7 +67,7 @@
                                 title: $("#title").val(),
                                 content: $("#content").val(),
                                 isNew: true
-                            }, function(data, status) {
+                            }, function (data, status) {
                                 if (data != "") {
                                     var newEntry = "<tr><td>" + $("#title").val() + "</td><td>" + $("#content").val() + "</td><td>" + data + "</td><td><input type=\"button\" onClick='edit(this)' value=\"Edit\" /></td></tr>";
                                     $("#posts").append(newEntry);
@@ -80,14 +89,14 @@
                         $("#makePost").show();
                         $("#update").show();
 
-                        editPost = function() {
+                        editPost = function () {
                             console.log(Index);
                             $.post("updatePosts.php", {
                                 title: $("#title").val(),
                                 content: $("#content").val(),
                                 isNew: false,
                                 index: Index
-                            }, function(data, status) {
+                            }, function (data, status) {
                                 $($($(that).parent().parent()).children()[0]).html($("#title").val());
                                 $($($(that).parent().parent()).children()[1]).html($("#content").val());
                                 $("#title").val("");
@@ -99,6 +108,16 @@
                         }
                     }
 
+                    $("#send").click(function () {
+                        $.post("sendmessage.php", {
+                            to: $("#to").val(),
+                            msg: $("#msg").val()
+                        }, function (data, status) {
+                            console.log(data);
+                            $("#to").val("");
+                            $("#msg").val("");
+                        });
+                    });
                 </script>
 
     </body>
