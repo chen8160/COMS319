@@ -30,7 +30,8 @@ foreach($users as $user){
         
         $publicKey = $user->publicKey;
         $enc_msg = rsa_encrypt($msg, $publicKey);
-        $new_msg = array("from"=>$_SESSION['username'], "to"=>$to, "msg"=>$msg);
+//        echo urlencode($enc_msg);
+        $new_msg = array("from"=>$_SESSION['username'], "to"=>$to, "msg"=>urlencode($enc_msg));
         $file[] = $new_msg;
         file_put_contents("messages.txt", json_encode($file));
     

@@ -57,7 +57,7 @@
                 <input type="button" id="send" name="send" value="Send Message" />
 
                 <script>
-                    $("#post").click(function() {
+                    $("#post").click(function () {
 
                         if ($("#makePost").is(':hidden')) {
                             $("#post").val("Submit");
@@ -67,7 +67,7 @@
                                 title: $("#title").val(),
                                 content: $("#content").val(),
                                 isNew: true
-                            }, function(data, status) {
+                            }, function (data, status) {
                                 if (data != "") {
                                     var newEntry = "<tr><td>" + $("#title").val() + "</td><td>" + $("#content").val() + "</td><td>" + data + "</td><td><input type=\"button\" onClick='edit(this)' value=\"Edit\" /></td></tr>";
                                     $("#posts").append(newEntry);
@@ -89,14 +89,14 @@
                         $("#makePost").show();
                         $("#update").show();
 
-                        editPost = function() {
+                        editPost = function () {
                             console.log(Index);
                             $.post("updatePosts.php", {
                                 title: $("#title").val(),
                                 content: $("#content").val(),
                                 isNew: false,
                                 index: Index
-                            }, function(data, status) {
+                            }, function (data, status) {
                                 $($($(that).parent().parent()).children()[0]).html($("#title").val());
                                 $($($(that).parent().parent()).children()[1]).html($("#content").val());
                                 $("#title").val("");
@@ -108,16 +108,16 @@
                         }
                     }
 
-                    $("#send").click(function() {
+                    $("#send").click(function () {
                         $.post("sendmessage.php", {
                             to: $("#to").val(),
                             msg: $("#msg").val()
-                        }, function(data, status) {
+                        }, function (data, status) {
+                            console.log(data);
                             $("#to").val("");
                             $("#msg").val("");
                         });
                     });
-
                 </script>
 
     </body>
