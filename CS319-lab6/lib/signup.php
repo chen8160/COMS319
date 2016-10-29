@@ -6,7 +6,7 @@
     $DB_dbName   = "db319t64";
 
     $username = $_REQUEST['postname'];
-    $password = $_REQUEST['postpassword'];
+    $password = md5($_REQUEST['postpassword']);
     $email = $_REQUEST['postemail'];
     $phone = $_REQUEST['postphone'];
     $librarian = 0;
@@ -25,6 +25,14 @@ $conn = new mysqli($DB_dbServer, $DB_username, $DB_password, $DB_dbName);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     echo "failed";
+    exit();
+}
+
+$sql = "SELECT userName FROM users WHERE userName='$username'";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    echo "user exists";
+    $conn->close();
     exit();
 }
 

@@ -9,26 +9,41 @@
 
 <body>
 
-    <form id="signup" method="post" name="myform">
-        <label>User Name :</label>
+    <!--    <form id="signup" method="post" name="myform">-->
+    <p>
+        <label for="username">User Name :</label>
         <input type="text" name="username" id="username" />
-        <label>Password :</label>
+    </p>
+    <p>
+        <label for="password">Password :</label>
         <input type="text" name="password" id="password" />
-        <label>Confirm password :</label>
+    </p>
+    <p>
+        <label for="confirm">Confirm password :</label>
         <input type="text" name="confirm" id="confirm" />
-        <label>Email :</label>
+    </p>
+    <p>
+        <label for="email">Email :</label>
         <input type="text" name="email" id="email" />
-        <label>Phone :</label>
+    </p>
+    <p>
+        <label for="phone">Phone :</label>
         <input type="text" name="phone" id="phone" />
-        <label>Are You Librarian? </label>
+    </p>
+    <p>
+        <label for="check_librarian">Are You Librarian? </label>
         <input type="checkbox" name="check_librarian" id="check_librarian" />
-        <label>First Name :</label>
+    </p>
+    <p>
+        <label for="firstname">First Name :</label>
         <input type="text" name="firstname" id="firstname" />
-        <label>Last Name :</label>
+    </p>
+    <p>
+        <label for="lastname">Last Name :</label>
         <input type="text" name="lastname" id="lastname" />
-        <input type="button" value="Signup" id="Signup" name="Signup" />
-        <input type="button" value="Go to Login page" id="Login" name="Go to Login page" hidden="true" />
-    </form>
+    </p>
+    <input type="button" value="Signup" id="Signup" name="Signup" />
+    <!--    </form>-->
 
 
     <script>
@@ -40,7 +55,6 @@
             var email = $('#email').val();
             var phone = $('#phone').val();
             var check_librarian = document.getElementById("check_librarian").checked;
-            console.log(check_librarian);
             var firstname = $('#firstname').val();
             var lastname = $('#lastname').val();
             if (validation(username, password, confirm, email, phone, firstname, lastname)) {

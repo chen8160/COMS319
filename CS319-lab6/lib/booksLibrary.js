@@ -1,43 +1,27 @@
 $(document).ready(function () {
-    $("#clearLS").click(function () {
-        window.localStorage.clear();
-    })
     Library.prototype.createTable();
 });
 
 function Library() {
     this.shelfs = new Array();
-    var s1 = new Shelf("Art");
-    var s2 = new Shelf("Science");
-    var s3 = new Shelf("Sport");
-    var s4 = new Shelf("Literature");
+    var s1 = new Shelf("Art", 0);
+    var s2 = new Shelf("Science", 1);
+    var s3 = new Shelf("Sport", 2);
+    var s4 = new Shelf("Literature", 3);
 
     this.shelfs.push(s1);
     this.shelfs.push(s2);
     this.shelfs.push(s3);
     this.shelfs.push(s4);
 
-    for (var i = 0; i < 25; i++) {
-        var id = Math.floor(Math.random() * 1000);
-        var b;
-        if (i % 5 == 0) {
-            var name = "Ref " + (Math.floor(Math.random() * 25) + 1);
-            b = new Book(name, id, true, null, true);
-        } else {
-            var name = "Book " + (Math.floor(Math.random() * 25) + 1);
-            b = new Book(name, id, false, null, true);
-        }
-
-        if (id % 4 == 0) {
-            this.shelfs[0].books.push(b);
-        } else if (id % 4 == 1) {
-            this.shelfs[1].books.push(b);
-        } else if (id % 4 == 2) {
-            this.shelfs[2].books.push(b);
-        } else if (id % 4 == 3) {
-            this.shelfs[3].books.push(b);
-        }
-    }
+    //TODO: query shelves from database.
+    $.post("query.php", {
+        op: "shelfs"
+    }, function (data, status) {
+        console.log(s1);
+        s1.books = JSON.parse(data)[0];
+        console.log(JSON.stringify(s1));
+    });
 }
 
 Library.prototype.setCSS = function () {
@@ -45,7 +29,7 @@ Library.prototype.setCSS = function () {
         for (var j = 0; j < this.shelfs[i].books.length; j++) {
             var r = $("#table tbody")[0].children[j + 1];
             var c = $(r)[0].children[i];
-            if (this.shelfs[i].books[j].presence) {
+            if (this.shelfs[i].books[j].presence == 1) {
                 $(c).css("background-color", "white");
             } else {
                 $(c).css("background-color", "red");
@@ -71,22 +55,8 @@ Library.prototype.createTable = function () {
             mytablebody.append(curr_row);
         }
 
-        if (window.localStorage.getItem("shelfs") === null) {
-            console.log("no lib yet");
 
-        } else {
-            l.shelfs = JSON.parse(localStorage.getItem("shelfs"));
-
-        }
-
-        var maxRows = 0;
-        for (i = 0; i < 4; i++) {
-            if (l.shelfs[i].books.length > maxRows) {
-                maxRows = l.shelfs[i].books.length;
-            }
-        }
-
-        for (var j = 0; j < maxRows; j++) {
+        for (var j = 0; j < 20; j++) {
 
             curr_row = $('<tr></tr>');
             for (i = 0; i < 4; i++) {
@@ -101,8 +71,7 @@ Library.prototype.createTable = function () {
         mytable.append(mytablebody);
         mytable.insertAfter($('#lib'));
 
-        var shelfString = JSON.stringify(l.shelfs);
-        localStorage.setItem("shelfs", shelfString);
+        //TODO: save shelves to data base;
 
         l.setCSS();
 
@@ -120,10 +89,10 @@ Library.prototype.createTable = function () {
                 $("#form").show();
             } else if (value != "") {
                 book = l.shelfs[colIndex].books[rowIndex - 1];
-                var des = "Book name: " + book.bookName + " Book ID: " + book.bookID + "\nIs Reference: " + book.isReference + " Borrowed By: " + book.brrowedBy + " Present: " + book.presence;
+                var des = "Book name: " + book.bookName + " Book ID: " + book.bookID + "\nBorrowed By: " + book.brrowedBy + " Present: " + book.presence;
                 $("#description").html(des);
 
-                if (!(/^username=admin/.test(document.cookie) || book.isReference)) {
+                if (!(/^username=admin/.test(document.cookie))) {
                     $("#borrow").show();
 
                     if (document.cookie.substring(9) == book.brrowedBy) {
@@ -168,10 +137,10 @@ Library.prototype.createTable = function () {
                 user = JSON.parse(userString);
             }
 
-            if (user.brrowCount < 2 && book.presence == true) {
+            if (user.brrowCount < 2 && book.presence == 1) {
                 user.brrowCount += 1;
                 book.brrowedBy = user.name;
-                book.presence = false;
+                book.presence = 0;
                 ret = "Success";
             }
 
@@ -191,7 +160,7 @@ Library.prototype.createTable = function () {
         $("#return").click(function () {
             $("#return").hide();
             book.brrowedBy = null;
-            book.presence = true;
+            book.presence = 1;
             var username = document.cookie.substring(9);
             var userString = localStorage.getItem(username);
             var user = JSON.parse(userString);
@@ -215,15 +184,15 @@ function User(name) {
     this.brrowCount = 0;
 }
 
-function Shelf(name) {
+function Shelf(name, id) {
+    this.id = id;
     this.name = name;
     this.books = new Array();
 }
 
-function Book(name, id, isR, studentName, isAvailable) {
+function Book(name, id, author, isAvailable) {
     this.bookName = name;
     this.bookID = id;
-    this.isReference = isR;
-    this.brrowedBy = studentName;
+    this.author = author;
     this.presence = isAvailable;
 }
