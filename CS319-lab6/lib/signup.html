@@ -32,55 +32,56 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('#Signup').click(function() {
-                var username = $('#username').val();
-                var password = $('#password').val();
-                var confirm = $('#confirm').val();
-                var email = $('#email').val();
-                var phone = $('#phone').val();
-                var check_librarian = $('#check_librarian').val();
-                var firstname = $('#firstname').val();
-                var lastname = $('#lastname').val();
-                if (validation(username, password, confirm, email, phone, firstname, lastname)) {
-                    //                    var obj = {};
-                    //                    obj.name = username;
-                    //                    obj.password = password;
-                    //                    obj.email = email;
-                    //                    obj.phone = phone;
-                    //                    obj.check_librarian = check_librarian;
-                    //                    obj.firstname = firstname;
-                    //                    obj.lastname = lastname;
-                    //                    localStorage.setItem("userList", JSON.stringify(obj));
-                    //                    document.cookie = obj;
-                    $.post('Signup.php', {
-                            postname: username,
-                            postpassword: password,
-                            postemail: email,
-                            postphone: phone,
-                            postcheck: check_librarian,
-                            postfirstname: firstname,
-                            postlastname: lastname
-                        },
-                        function(data, status) {
-                            if (data == "success") {
-                                window.open("./login.html", "_self");
-                            } else {
-                                //                                document.getElementById("username").value = "";
-                                //                                document.getElementById("password").value = "";
-                                //                                document.getElementById("confirm").value = "";
-                                //                                document.getElementById("email").value = "";
-                                //                                document.getElementById("phone").value = "";
-                                //                                document.getElementById("check_librarian").value = "";
-                                //                                document.getElementById("firstname").value = "";
-                                //                                document.getElementById("lastname").value = "";
-                                //                                alert("user: " + username + " has signed up");
-                                console.log(data);
-                            }
-                        });
-                    //                    $("#Login").show();
-                }
-            });
+        //        $(document).ready(function () {
+        $('#Signup').click(function () {
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var confirm = $('#confirm').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var check_librarian = document.getElementById("check_librarian").checked;
+            console.log(check_librarian);
+            var firstname = $('#firstname').val();
+            var lastname = $('#lastname').val();
+            if (validation(username, password, confirm, email, phone, firstname, lastname)) {
+                //                    var obj = {};
+                //                    obj.name = username;
+                //                    obj.password = password;
+                //                    obj.email = email;
+                //                    obj.phone = phone;
+                //                    obj.check_librarian = check_librarian;
+                //                    obj.firstname = firstname;
+                //                    obj.lastname = lastname;
+                //                    localStorage.setItem("userList", JSON.stringify(obj));
+                //                    document.cookie = obj;
+                $.post('Signup.php', {
+                        postname: username,
+                        postpassword: password,
+                        postemail: email,
+                        postphone: phone,
+                        postcheck: check_librarian,
+                        postfirstname: firstname,
+                        postlastname: lastname
+                    },
+                    function (data, status) {
+                        if (data == "success") {
+                            window.open("./login.html", "_self");
+                        } else {
+                            //                                document.getElementById("username").value = "";
+                            //                                document.getElementById("password").value = "";
+                            //                                document.getElementById("confirm").value = "";
+                            //                                document.getElementById("email").value = "";
+                            //                                document.getElementById("phone").value = "";
+                            //                                document.getElementById("check_librarian").value = "";
+                            //                                document.getElementById("firstname").value = "";
+                            //                                document.getElementById("lastname").value = "";
+                            //                                alert("user: " + username + " has signed up");
+                            console.log(data);
+                        }
+                    });
+                //                    $("#Login").show();
+            }
+            //            });
             //
             //            $('#Login').click(function() {
             //                window.location.href = "Login.html"
@@ -89,7 +90,7 @@
             function validation(username, password, confirm, email, phone, firstname, lastname) {
                 var checkname = /^[a-zA-Z]+$/;
                 var checkusername = /^[a-zA-Z0-9]+$/;
-                var checkEmail = /^[A-Za-z0-9]{3}@[A-Za-z0-9]{3}.[a-zA-Z0-9]{3}$/;
+                var checkEmail = /^[A-Za-z0-9]+@[A-Za-z0-9]+.[a-zA-Z0-9]{3}$/;
                 var checkPhone = /^([0-9]{3}-[0-9]{3}-[0-9]{4}|[0-9]{10})$/;
                 var check1;
                 var check2;
@@ -139,7 +140,6 @@
 
 
         });
-
     </script>
 
 

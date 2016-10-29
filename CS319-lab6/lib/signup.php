@@ -9,9 +9,15 @@
     $password = $_REQUEST['postpassword'];
     $email = $_REQUEST['postemail'];
     $phone = $_REQUEST['postphone'];
-    $librarian = $_REQUEST['postcheck'];
+    $librarian = 0;
+    if($_REQUEST['postcheck'] == "true"){
+        $librarian = true;
+    }
     $firstName = $_REQUEST['postfirstname'];
     $lastName = $_REQUEST['postlastname'];
+
+//echo $username . " " . $password . " " . $email . " " . $phone . " " . $librarian . " " . $firstName . " " . $lastName;
+
 
 $conn = new mysqli($DB_dbServer, $DB_username, $DB_password, $DB_dbName);
 
@@ -22,9 +28,13 @@ if ($conn->connect_error) {
     exit();
 }
 
-$sql = "INSERT INTO users VALUES ($username, $password, $email, $phone, $librarian, $firstName, $lastName)";
+$sql = "INSERT INTO users VALUES ('$username', '$password', '$email', '$phone', '$librarian', '$firstName', '$lastName')";
 
-$conn->query($sql);
+if ($conn->query($sql) === TRUE) {
+ //   echo "New record created successfully<br>";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
 $conn->close();
 echo "success";
