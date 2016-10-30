@@ -1,27 +1,39 @@
 $(document).ready(function () {
-    Library.prototype.createTable();
+    l = new Library();
 });
 
 function Library() {
     this.shelfs = new Array();
-    var s1 = new Shelf("Art", 0);
-    var s2 = new Shelf("Science", 1);
-    var s3 = new Shelf("Sport", 2);
-    var s4 = new Shelf("Literature", 3);
+    var s1 = new Shelf("Art", 0, new Array());
+    var s2 = new Shelf("Science", 1, new Array());
+    var s3 = new Shelf("Sport", 2, new Array());
+    var s4 = new Shelf("Literature", 3, new Array());
+    var shelfs = this.shelfs;
 
-    this.shelfs.push(s1);
-    this.shelfs.push(s2);
-    this.shelfs.push(s3);
-    this.shelfs.push(s4);
 
     //TODO: query shelves from database.
     $.post("query.php", {
         op: "shelfs"
     }, function (data, status) {
-        console.log(s1);
-        s1.books = JSON.parse(data)[0];
-        console.log(JSON.stringify(s1));
+
+        var json_obj = JSON.parse(data);
+
+        s1 = new Shelf("Art", 0, json_obj[0]);
+        s2 = new Shelf("Science", 1, json_obj[1]);
+        s3 = new Shelf("Sport", 2, json_obj[2]);
+        s4 = new Shelf("Literature", 3, json_obj[3]);
+
+        shelfs.push(s1);
+        shelfs.push(s2);
+        shelfs.push(s3);
+        shelfs.push(s4);
+
+        console.log(shelfs);
+
+        Library.prototype.createTable();
+
     });
+
 }
 
 Library.prototype.setCSS = function () {
@@ -40,7 +52,6 @@ Library.prototype.setCSS = function () {
 
 Library.prototype.createTable = function () {
 
-        l = new Library();
         var rowIndex = 0;
         var colIndex = 0;
         var book = null;
@@ -84,7 +95,7 @@ Library.prototype.createTable = function () {
             console.log("Index R: " + rowIndex + " C: " + colIndex + " Value: " + value);
 
 
-            if (value === "" && /^username=admin/.test(document.cookie)) {
+            if (value === "" && admin == 1) {
                 console.log("Add book here");
                 $("#form").show();
             } else if (value != "") {
@@ -92,9 +103,9 @@ Library.prototype.createTable = function () {
                 var des = "Book name: " + book.bookName + " Book ID: " + book.bookID + "\nBorrowed By: " + book.brrowedBy + " Present: " + book.presence;
                 $("#description").html(des);
 
-                if (!(/^username=admin/.test(document.cookie))) {
+                if (admin == 0) {
                     $("#borrow").show();
-
+                    //TODO: return book
                     if (document.cookie.substring(9) == book.brrowedBy) {
                         $("#return").show();
                     }
@@ -184,10 +195,14 @@ function User(name) {
     this.brrowCount = 0;
 }
 
-function Shelf(name, id) {
+function Shelf(name, id, books) {
     this.id = id;
     this.name = name;
-    this.books = new Array();
+    this.books = books;
+    var i;
+    for (i = 0; i < books.length; i++) {
+        books[i] = new Book(books[i].bookName, books[i].bookID, books[i].author, books[i].presence);
+    }
 }
 
 function Book(name, id, author, isAvailable) {

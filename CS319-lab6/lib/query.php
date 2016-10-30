@@ -36,4 +36,50 @@
         echo json_encode($shelfs);
         
     }
+
+class Library {
+    private $shelfs;
+    
+    function __contruct($shelfs){
+        $this->shelfs = $shelfs;
+    }
+}
+
+class Book {
+    private bookID;
+    private bookName;
+    private author;
+    private presence;
+    
+    function __construct($id, $name, $author, $presence){
+        $this->bookID = $id;
+        $this->bookName = $name;
+        $this->author = $author;
+        $this->presence = $presence;
+    }
+}
+
+class Student {
+    private $name;
+    private $admin;
+    
+    function __construct($name, $admin){
+        $this->name = $name;
+        $this->admin = $admin;
+    }
+}
+
+class Shelf {
+    private id;
+    private name;
+    private books;
+    
+    function __contruct($name, $id, $books){
+        $this->name = $name;
+        $this->id = $id;
+        $this->books = $books;
+    }
+}
+
+
 ?>

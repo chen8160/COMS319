@@ -6,6 +6,10 @@
     <head>
         <title>Library</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            admin = "<?php echo $_SESSION['librarian']; ?>";
+
+        </script>
         <script src="booksLibrary.js"></script>
     </head>
 
