@@ -1,11 +1,13 @@
 <p>
     <label for="UN">User Name</label>
-    <input id="UN" name="userName" type="text" ng-model="username" />
+    <input id="UN" name="userName" type="text" ng-model="username" ng-keyup="loginFn()" />
 </p>
 <p>
     <label for="PW">Password</label>
-    <input id="PW" name="passWord" type="text" ng-model="password" />
+    <input id="PW" name="passWord" type="text" ng-model="password" ng-keyup="loginFn()" />
 </p>
 <p>
-    <input type="button" id="login" name="login" value="Login" ng-click="login()" />
+    <a href="{{url}}">
+        <input type="button" id="login" name="login" value="Login" ng-click="checkLogin()" />
+    </a>
 </p>
