@@ -1,1 +1,21 @@
 <h1>Librarian</h1>
+<input id="clearLS" type="button" value="Clear Localstorage" />
+<div id="lib">Library Table</div>
+<div id="description"></div>
+<div ng-hide="false" id="form">
+    <label for="bookName">Book Name</label>
+    <input id="bookName" type="text" name="bookName" />
+    <!--
+    <label for="bookID">Book ID</label>
+    <input id="bookID" type="text" name="bookID" />
+-->
+    <label for="shelf">Shelf</label>
+    <select id="shelf">
+        <option value="art">Art</option>
+        <option value="science">Science</option>
+        <option value="sport">Sport</option>
+        <option value="literature">Literature</option>
+    </select>
+
+    <input id="add" type="button" value="Add" />
+</div>
