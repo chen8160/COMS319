@@ -1,6 +1,17 @@
 <h1>Librarian</h1>
 <input id="clearLS" type="button" value="Clear Localstorage" />
 <div id="lib">Library Table</div>
+<table id="table" border="2">
+    <tbody>
+        <th>Art</th>
+        <th>Science</th>
+        <th>Sport</th>
+        <th>Literature</th>
+        <tr ng-repeat="row in lib.rows">
+            <td ng-style="{backgroundColor: checkPresence(val)}" ng-click="detail()" ng-repeat="val in row track by $index"> {{val.bookName}} </td>
+        </tr>
+    </tbody>
+</table>
 <div id="description"></div>
 <div ng-hide="false" id="form">
     <label for="bookName">Book Name</label>
@@ -19,3 +30,5 @@
 
     <input id="add" type="button" value="Add" />
 </div>
+<br>
+<a href="#/">Logout</a>
