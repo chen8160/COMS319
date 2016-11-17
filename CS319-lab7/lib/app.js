@@ -1,6 +1,6 @@
 angular.module('myApp', ['ngRoute'])
     .config(function ($routeProvider) {
-        $routeProvider.when("/login", {
+        $routeProvider.when("/", {
             //TODO: controller
             controller: "loginController",
             templateUrl: "login.html"
@@ -30,4 +30,7 @@ angular.module('myApp', ['ngRoute'])
             if (/^U/.test($scope.username) || $scope.username == "admin" && $scope.username == $scope.password) return;
             alert("Login Failed");
         }
+    })
+    .controller('libController', function ($scope) {
+
     });
