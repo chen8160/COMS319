@@ -84,7 +84,8 @@ angular.module('myApp', ['ngRoute'])
         $("#form #add").click(function () {
             var name = $("#bookName").val();
             var type = $("#type").val();
-            var newBook = new Book(name, type, false, null, true);
+            var isRef = document.getElementById("check_ref").checked;
+            var newBook = new Book(name, type, isRef, null, true);
 
             var shelfIndex = 0;
 
