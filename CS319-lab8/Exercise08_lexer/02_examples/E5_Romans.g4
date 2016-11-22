@@ -22,7 +22,7 @@ fragment FIFTY: 'L' ;
 
 fragment ROMAN_BASE: ONE | FOUR | FIVE | NINE | TEN | FORTY | FIFTY;
 
-ROMAN: ( ROMAN_BASE ) {  
+ROMAN: ( ROMAN_BASE ) {
           if (getText().equals("I")) total += 1;
           else if (getText().equals("IV")) total += 4;
           else if (getText().equals("V")) total += 5;
@@ -33,10 +33,9 @@ ROMAN: ( ROMAN_BASE ) {
           System.out.print("["+getText()+"]");
        } ;
 
-WS:  [ \t]+ ; 
+WS:  [ \t]+ ;
 
 NEWLINE: '\n' {
       System.out.println("\n" + total);
       total = 0;
     };
-
