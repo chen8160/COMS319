@@ -37,44 +37,54 @@ fragment DISCOVER: ('6011' FOURDIGIT FOURDIGIT FOURDIGIT) | ('65' FOURDIGIT FOUR
 fragment JCB: (('2131'|'1800') THREEDIGIT THREEDIGIT THREEDIGIT DIGIT DIGIT) | ('35' THREEDIGIT THREEDIGIT THREEDIGIT FOURDIGIT DIGIT);
 
 
-//STARTING: '</' {tag = true;} | '<' {tag = true;};
-//STOPPING: '>' {tag = false;};
+STARTING: '</' {tag = true;} | '<' {tag = true;};
+STOPPING: '>' {tag = false;};
 
-//ELEMENTTAG: {tag}? ELEMENTNAME {
-//
-//  tagName = getText();
-//  System.out.println("Element Name: " + getText());
-//
+ELEMENTTAG: {tag}? ELEMENTNAME {
+
+  tagName = getText();
+  System.out.println("Element Name: " + getText());
+
+};
+
+//ELEMENTTAG: '<' ELEMENTNAME '>'
+//{
+//  String output = getText().substring(1, getText().length() //- 1);
+//  tagName = output;
+//  System.out.println("Starting Element Name: " + output);
+//}
+//| '</' ELEMENTNAME '>'
+//{
+//  output = getText().substring(2, getText().length() - 1);
+//  tagName = output;
+//  System.out.println("Stop Element Name: " + output);
 //};
 
-ELEMENTTAG: '<' ELEMENTNAME '>' .*? '</' ELEMENTNAME '>'
-{
-  tag = false;
-  String output = getText().substring(1, getText().length() - 1);
-  tagName = output;
-  System.out.println("Starting Element Name: " + output);
-} -> more, pushMode(INSIDE);
-
-mode INSIDE;
-
 EMAIL: {!tag && tagName.matches("(?i)email")}? LOCAL '@' DOMAIN {
+  tag = true;
   System.out.println("Email: " + getText());
-} -> popMode;
+};
 
 DATETEST: {!tag && tagName.matches("(?i)date")}? DATE '/' MONTH '/' YEAR {
+  tag = true;
   System.out.println("Date: " + getText());
-} -> popMode;
+};
 
 PHONE: {!tag && tagName.matches("(?i)phone")}?
 ((THREEDIGIT '-' THREEDIGIT '-' FOURDIGIT) | ( '(' THREEDIGIT ')' THREEDIGIT '-' FOURDIGIT) | (THREEDIGIT ' ' THREEDIGIT ' ' FOURDIGIT) | (THREEDIGIT '.' THREEDIGIT '.' FOURDIGIT))
 {
+  tag = true;
   System.out.println("Phone: " + getText());
-} -> popMode;
+};
 
 CREDITCARD: {!tag && tagName.matches("(?i)creditcard")}? (VISA | MASTER | AMERICANEXP | DINERSCLUB | DISCOVER | JCB) {
+  tag = true;
   System.out.println("Credit Card: " + getText());
-} -> popMode;
+};
 
-OTHER: {!tag && !tagName.matches("(?i)email") && !tagName.matches("(?i)date") && !tagName.matches("(?i)phone") && !tagName.matches("(?i)creditcard")}? (DIGIT | ALPHA| SPECIALCHAR | ' ')+ {System.out.println("Other: " + "TAG: " + tagName + " " + getText());} -> popMode;
+OTHER: {!tag && !tagName.matches("(?i)email") && !tagName.matches("(?i)date") && !tagName.matches("(?i)phone") && !tagName.matches("(?i)creditcard")}? (DIGIT | ALPHA| SPECIALCHAR | ' ')+ {
+  tag = true;
+  System.out.println("Other: " + "TAG: " + tagName + " " + getText());
+};
 
-WS: [ \r\t\n]+ {System.out.println("matching WS rule");skip();} -> popMode;
+WS: [ \r\t\n]+ {System.out.println("matching WS rule");skip();};
